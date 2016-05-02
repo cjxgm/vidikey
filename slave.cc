@@ -61,14 +61,23 @@ private:
         }
         note += 12 * c->octave;
         std::cerr << (isdown ? "# " : ". ") << note << "\n";
+
+        auto buf_data = new char[3]{
+            (char)(isdown ? 1 : 2),
+            (char)note,
+            (char)90,
+        };
+        auto buf = uv_buf_init(buf_data, 3);
+        auto req = new uv_write_t;
+        req->data = buf_data;
+        uv_write(req, (uv_stream_t*) &conn, &buf, 1, &sent);
     }
 
-    static void sent(uv_connect_t* req, int status)
+    static void sent(uv_write_t* req, int status)
     {
         uv_assert(status);
-        std::cerr << "> connected\n";
-        auto conn = req->handle;
-        uv_close((uv_handle_t*) conn, nullptr);
+        auto buf_data = (char*) req->data;
+        delete[] buf_data;
         delete req;
     }
 };
