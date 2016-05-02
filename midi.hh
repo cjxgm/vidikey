@@ -1,5 +1,5 @@
 #pragma once
-#include <alsa/asoundlib.h>
+#include <alsa/asoundlib.h>     // ml:lib += alsa
 
 struct midi
 {
