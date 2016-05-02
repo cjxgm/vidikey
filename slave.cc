@@ -9,6 +9,8 @@ struct client
 {
     client(std::string const& server_addr, int server_port)
     {
+        keyboard_init(uv_default_loop(), &kbd);
+
         service.data = this;
         uv_assert(uv_tcp_init(uv_default_loop(), &service));
         uv_assert(uv_tcp_nodelay(&service, true));

@@ -2,7 +2,7 @@
 
 struct keymap
 {
-    bool is_quit(int code) { return false; }
-    int midi_note(int code) { return -1; }
+    bool is_quit(int code);
+    int midi_note(int code);
 };
 
