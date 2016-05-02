@@ -26,6 +26,7 @@ private:
     uv_tcp_t service;
     keyboard_t kbd;
     keymap km;
+    int octave = 3;
 
     static void connection(uv_connect_t* req, int status)
     {
@@ -46,12 +47,20 @@ private:
         auto& km = c->km;
         auto& conn = c->service;
 
-        std::cerr << (isdown ? "* " : "  ") << key << "\n";
+        std::cerr << "\e[G\e[K";
         if (km.is_quit(key)) {
             uv_close((uv_handle_t*) &conn, nullptr);
             keyboard_close(kbd);
+            return;
         }
-        std::cerr << "# " << km.midi_note(key) << "\n";
+
+        auto note = km.midi_note(key);
+        if (note == -1) {
+            std::cerr << (isdown ? "* " : "  ") << key << "\n";
+            return;
+        }
+        note += 12 * c->octave;
+        std::cerr << (isdown ? "# " : ". ") << note << "\n";
     }
 
     static void sent(uv_connect_t* req, int status)

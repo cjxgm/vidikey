@@ -46,8 +46,10 @@ void keyboard_init(uv_loop_t* loop, keyboard_t* kbd)
     kbd->loop = loop;
 }
 
-void keyboard_close(keyboard_t* kbd)
+void keyboard_close(keyboard_t*)
 {
+    uv_tty_reset_mode();
+
     std::cerr << "TODO: keyboard close\n";
     std::exit(0);
 }
@@ -58,6 +60,7 @@ struct keyboard_info
     key_cb* on_key;
     ::input_event ev;
     uv_file fd;
+    uv_tty_t tty;
 };
 
 static void read_next_reuse(uv_fs_t* req);
@@ -87,12 +90,28 @@ static void read_next_reuse(uv_fs_t* req)
     read_next(req);
 }
 
+static void alloc_buf(uv_handle_t*, size_t size, uv_buf_t* buf)
+{
+    *buf = uv_buf_init(new char[size], size);
+}
+
+static void tty_input(uv_stream_t*, ssize_t, uv_buf_t const*)
+{
+    // empty function body intentionally
+    // for ignoring tty input
+}
+
 static void opened(uv_fs_t* req)
 {
     uv_assert(req->result);
 
     auto info = (keyboard_info*) req->data;
     info->fd = req->result;
+
+    // dirty hack to ignore tty input
+    uv_tty_init(req->loop, &info->tty, 0, 1);
+    uv_read_start((uv_stream_t*) &info->tty, &alloc_buf, tty_input);
+    uv_tty_set_mode(&info->tty, UV_TTY_MODE_RAW);
 
     uv_fs_req_cleanup(req);
     read_next(req);
