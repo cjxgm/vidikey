@@ -1,2 +1,2 @@
-= distributed midi keyboard
+= distributed virtual midi keyboard
 

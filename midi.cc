@@ -11,7 +11,7 @@ static void alsa_assert(int err)
 midi::midi()
 {
     alsa_assert(snd_seq_open(&seq, "default", SND_SEQ_OPEN_OUTPUT, {}));
-    snd_seq_set_client_name(seq, "Didikey Master");
+    snd_seq_set_client_name(seq, "Vidikey Master");
     port = snd_seq_create_simple_port(seq, "out",
             SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,
             SND_SEQ_PORT_TYPE_MIDI_GENERIC);

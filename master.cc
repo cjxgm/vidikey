@@ -106,7 +106,7 @@ private:
 
 int main()
 {
-    std::cerr << "Didikey Master (server)\n";
+    std::cerr << "Vidikey Master (server)\n";
     server s;
     std::cerr << "- listening on 0.0.0.0:2277\n";
     uv_run(uv_default_loop(), UV_RUN_DEFAULT);
