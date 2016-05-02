@@ -44,3 +44,13 @@ bool keymap::is_octave_down(int code)
     return (code == KEY_LEFTBRACE);
 }
 
+bool keymap::is_velocity_up(int code)
+{
+    return (code == KEY_EQUAL);
+}
+
+bool keymap::is_velocity_down(int code)
+{
+    return (code == KEY_MINUS);
+}
+

@@ -27,6 +27,7 @@ private:
     keyboard_t kbd;
     keymap km;
     int octave = 3;
+    int velocity = 9;
 
     static void connection(uv_connect_t* req, int status)
     {
@@ -68,6 +69,20 @@ private:
             return;
         }
 
+        if (km.is_velocity_up(key)) {
+            if (isdown && c->velocity < 12)
+                c->velocity++;
+            std::cerr << "velocity " << c->velocity << "\n";
+            return;
+        }
+
+        if (km.is_velocity_down(key)) {
+            if (isdown && c->velocity > 1)
+                c->velocity--;
+            std::cerr << "velocity " << c->velocity << "\n";
+            return;
+        }
+
         auto note = km.midi_note(key);
         if (note == -1) {
             std::cerr << (isdown ? "* " : "  ") << key << "\n";
@@ -79,7 +94,7 @@ private:
         auto buf_data = new char[3]{
             (char)(isdown ? 1 : 2),
             (char)note,
-            (char)90,
+            (char)(c->velocity * 10),
         };
         auto buf = uv_buf_init(buf_data, 3);
         auto req = new uv_write_t;
