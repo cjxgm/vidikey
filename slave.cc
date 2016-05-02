@@ -54,6 +54,20 @@ private:
             return;
         }
 
+        if (km.is_octave_up(key)) {
+            if (isdown && c->octave < 7)
+                c->octave++;
+            std::cerr << "octave " << c->octave << "\n";
+            return;
+        }
+
+        if (km.is_octave_down(key)) {
+            if (isdown && c->octave > 0)
+                c->octave--;
+            std::cerr << "octave " << c->octave << "\n";
+            return;
+        }
+
         auto note = km.midi_note(key);
         if (note == -1) {
             std::cerr << (isdown ? "* " : "  ") << key << "\n";

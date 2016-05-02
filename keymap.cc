@@ -24,7 +24,7 @@ static std::map<int, int> key_to_note {
 
 bool keymap::is_quit(int code)
 {
-    return (code == 1);
+    return (code == KEY_ESC);
 }
 
 int keymap::midi_note(int code)
@@ -32,5 +32,15 @@ int keymap::midi_note(int code)
     auto note = key_to_note.find(code);
     if (note == key_to_note.end()) return -1;
     return note->second;
+}
+
+bool keymap::is_octave_up(int code)
+{
+    return (code == KEY_RIGHTBRACE);
+}
+
+bool keymap::is_octave_down(int code)
+{
+    return (code == KEY_LEFTBRACE);
 }
 
