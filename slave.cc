@@ -1,17 +1,9 @@
-// ml:lib += libuv
 // ml:run = $bin 127.0.0.1
-#include <uv.h>
+#include "uv.hh"
 #include <iostream>
 #include <deque>
 #include "keymap.hh"
 #include "keyboard.hh"
-
-static void uv_assert(int err)
-{
-    if (err >= 0) return;
-    std::cerr << "* error: [" << uv_err_name(err) << "] " << uv_strerror(err) << "\n";
-    std::exit(-err);
-}
 
 struct client
 {

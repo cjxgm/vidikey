@@ -1,15 +1,7 @@
-// ml:lib += libuv
-#include <uv.h>
+#include "uv.hh"
 #include <iostream>
 #include <deque>
 #include "midi.hh"
-
-static void uv_assert(int err)
-{
-    if (err >= 0) return;
-    std::cerr << "* error: [" << uv_err_name(err) << "] " << uv_strerror(err) << "\n";
-    std::exit(-err);
-}
 
 static void alloc_buf(uv_handle_t*, size_t size, uv_buf_t* buf)
 {
